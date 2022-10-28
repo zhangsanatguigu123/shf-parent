@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 在全局范围内对Mybatis进行配置 -->
+    <settings>
+        <!-- 规则要求Java实体类属性名命名方式：首字母小写的驼峰式命名 -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageHelper"></plugin>
+    </plugins>
+</configuration>

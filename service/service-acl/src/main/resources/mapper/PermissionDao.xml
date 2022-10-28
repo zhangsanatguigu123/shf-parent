@@ -1,0 +1,33 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.atguigu.dao.PermissionDao">
+   <select id="findAll" resultType="permission">
+        select * from acl_permission where is_deleted=0
+   </select>
+    <select id="findPermissionByAdminId" resultType="permission">
+        select DISTINCT acl_permission.*
+        from acl_permission,acl_role_permission,acl_admin_role
+        where
+                acl_permission.id=acl_role_permission.permission_id
+          and acl_role_permission.role_id=acl_admin_role.role_id
+          and acl_admin_role.admin_id=#{adminId}
+          and acl_permission.is_deleted=0
+          and acl_role_permission.is_deleted=0
+          and acl_admin_role.is_deleted=0
+          and acl_permission.type=1
+    </select>
+
+<insert id="insert">
+     insert into acl_permission( parent_id, name, url, code, type, sort)
+     values(#{parentId},#{name},#{url},#{code},#{type},#{sort})
+</insert>
+
+    <select id="findById" resultType="permission">
+         select * from acl_permission where id=#{id}
+    </select>
+    <update id="update">
+         update acl_permission set name=#{name},code=#{code},sort=#{sort} where id=#{id}
+    </update>
+</mapper>

@@ -1,0 +1,74 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.atguigu.dao.AdminDao">
+    <!--2022-10-18-->
+    <select id="findPage" resultType="admin">
+         select * from acl_admin
+          <where>
+              <if test="username!=null and username!=''">and username=#{username}</if>
+              <if test="name!=null and name!=''">and name=#{name}</if>
+              <if test="phone!=null and phone!=''">and phone=#{phone}</if>
+              <if test="createTimeBegin!=null and createTimeBegin!='' ">and create_time>=#{createTimeBegin}</if>
+              <if test="createTimeEnd!=null and createTimeEnd!='' ">and create_time&lt;=#{createTimeEnd}</if>
+              and is_deleted=0
+          </where>
+    </select>
+
+    <insert id="insert">
+         insert into acl_admin( username, password, name, phone) VALUES(#{username},#{password},#{name},#{phone})
+    </insert>
+
+    <select id="findById" resultType="admin">
+         select * from acl_admin where id=#{adminId} and is_deleted=0
+    </select>
+    <update id="update">
+        update acl_admin
+            <set>
+                <if test="username!=null and username!=''">
+                     username=#{username},
+                </if>
+                <if test="name!=null and name!=''">
+                     name=#{name},
+                </if>
+
+                <if test="phone!=null and phone!=''">
+                    phone=#{phone},
+                </if>
+                <if test="headUrl!=null and headUrl!=''">
+                    head_url=#{headUrl},
+                </if>
+
+              update_time=now()
+
+            </set>
+        where id=#{id}
+    </update>
+
+    <update id="delete">
+         update acl_admin set is_deleted=1 where id=#{adminId}
+    </update>
+
+    <select id="findAll" resultType="admin">
+         select * from acl_admin where  is_deleted=0
+    </select>
+
+    <select id="findAdminByUserName" resultType="admin">
+         select * from acl_admin where username=#{username}
+    </select>
+
+    <select id="findPermissionCodeByAdminId" resultType="string">
+        select  DISTINCT acl_permission.`code`
+        from acl_permission,acl_role_permission,acl_admin_role
+        where
+                acl_permission.id=acl_role_permission.permission_id
+          and acl_role_permission.role_id=acl_admin_role.role_id
+          and acl_admin_role.admin_id=#{adminId}
+          and acl_permission.is_deleted=0
+          and acl_role_permission.is_deleted=0
+          and acl_permission.type=2
+          and acl_admin_role.is_deleted=0
+    </select>
+
+</mapper>

@@ -1,0 +1,28 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.atguigu.dao.HouseBrokerDao">
+   <select id="findListByHouseId" resultType="houseBroker">
+        select * from hse_house_broker where house_id=#{houseId} and is_deleted=0
+   </select>
+    <insert id="insert">
+         insert into hse_house_broker(house_id, broker_id,broker_name, broker_head_url)
+         VALUES (#{houseId},#{brokerId},#{brokerName},#{brokerHeadUrl})
+    </insert>
+    <select id="findBrokerByHouseIdAndBrokerId" resultType="houseBroker">
+         select * from hse_house_broker where house_id=#{houseId} and broker_id=#{brokerId}
+    </select>
+
+    <select id="findById" resultType="houseBroker">
+         select * from hse_house_broker where id=#{id}
+    </select>
+
+    <update id="update">
+         update hse_house_broker set broker_id=#{brokerId},broker_name=#{brokerName},broker_head_url=#{brokerHeadUrl},update_time=now()
+          where id=#{id}
+    </update>
+    <update id="delete">
+        update  hse_house_broker set is_deleted=1 where id=#{id}
+    </update>
+</mapper>

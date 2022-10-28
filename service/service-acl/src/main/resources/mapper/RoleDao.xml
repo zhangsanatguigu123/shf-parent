@@ -1,0 +1,67 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.atguigu.dao.RoleDao">
+    <sql id="baseSql">
+        select id, role_name, role_code, description, create_time, update_time, is_deleted
+    </sql>
+    <select id="findAll" resultType="role">
+        <include refid="baseSql">
+        </include>
+        from acl_role where is_deleted=0
+    </select>
+
+    <!--useGeneratedKeys="true" keyProperty="id"-->
+    <insert id="insert" >
+         insert into acl_role(role_name, role_code, description)
+         VALUES (#{roleName},#{roleCode},#{description})
+    </insert>
+
+    <select id="findById" resultType="role">
+         select * from acl_role where id=#{roleId} and is_deleted=0
+    </select>
+
+    <update id="update">
+        <!-- update acl_role set role_name=#{roleName},role_code=#{roleCode},description=#{description}
+         where id=#{id}-->
+
+
+        update acl_role
+          <set>
+              <if test="roleName!=null">
+                   role_name=#{roleName},
+              </if>
+
+              <if test="roleCode!=null">
+                  role_code=#{roleCode},
+              </if>
+
+              <if test="description!=null">
+                  description=#{description},
+              </if>
+             update_time=now()
+          </set>
+        where id=#{id}
+    </update>
+
+
+    <update id="delete">
+       update acl_role set is_deleted=1 where id=#{roleId}
+    </update>
+
+    <!--%?%-->
+    <select id="findPage" resultType="role">
+        <!-- select * from acl_role where role_name like concat('%',#{roleName},'%')-->
+
+        select * from acl_role
+         <where>
+              <if test="roleName!=null">
+                and  role_name like concat('%',#{roleName},'%')
+              </if>
+              and
+             is_deleted=0
+         </where>
+
+    </select>
+</mapper>

@@ -1,0 +1,28 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.atguigu.dao.HouseUserDao">
+   <select id="findListByHouseId" resultType="houseUser">
+        select * from hse_house_user where house_id=#{houseId} and is_deleted=0
+   </select>
+
+    <insert id="insert">
+        insert into hse_house_user(house_id, name, phone, sex, id_no)
+        VALUES (#{houseId},#{name},#{phone},#{sex},#{idNo})
+    </insert>
+
+    <select id="findById" resultType="houseUser">
+         select * from hse_house_user where id=#{id}
+    </select>
+
+    <update id="update">
+         update  hse_house_user set name=#{name}, phone=#{phone}, sex=#{sex}, id_no=#{idNo},update_time=now()
+              where id=#{id}
+    </update>
+
+    <update id="delete">
+         update hse_house_user set is_deleted=1 where id=#{id}
+    </update>
+
+</mapper>

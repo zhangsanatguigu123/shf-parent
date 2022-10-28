@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!--数据源-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="username" value="root"></property>
+        <property name="password" value="root"></property>
+        <property name="url" value="jdbc:mysql://localhost:3306/db_house?serverTimeZone=Asia/Shanghai"></property>
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property>
+    </bean>
+    <!--spring整合mybatis的配置-->
+    <bean class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"></property>
+        <property name="configLocation" value="classpath:mybatis-config.xml"></property>
+        <property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+        <property name="typeAliasesPackage" value="com.atguigu.entity"></property>
+    </bean>
+    <!--为所有的dao接口创建代理对象
+       功能相当于sqlsession.getMapper(xxMapper.class)
+    -->
+    <mybatis:scan base-package="com.atguigu.dao"></mybatis:scan>
+
+
+</beans>
